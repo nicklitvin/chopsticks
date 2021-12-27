@@ -25,8 +25,8 @@ class Game:
     def draw(self):
         print(self.linebreak)
         print(f'{self.mainPlayer.name}\'s turn')
-        self.p1.drawHands()
-        self.p2.drawHands()
+        self.otherPlayer.drawUpsideDownHands()
+        self.mainPlayer.drawHands()
 
     def isGameOver(self):
         if self.p1.isDead() or self.p2.isDead():
@@ -34,10 +34,11 @@ class Game:
 
     def endScreen(self):
         self.winner = self.p1 if self.p2.isDead() else self.p2
-
+        self.loser = self.p1 if self.winner is self.p2 else self.p2
 
         print(self.linebreak)
-        self.draw()
+        self.winner.drawUpsideDownHands()
+        self.loser.drawHands()
         print(f'winner:{self.winner.name}')
         print(self.linebreak)
 
@@ -58,6 +59,5 @@ class Game:
 
         print('closing terminal')
 
-import doctest
-doctest.testmod()
-Game()
+if __name__ == '__main__':
+    Game()
