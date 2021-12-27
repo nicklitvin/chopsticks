@@ -1,2 +1,4 @@
-draw upside down hands on opponent
-always draw main player on bottom 
+make hand generation lazy
+combine upside down and normal hand generation
+make easier tests for game
+center name between hands

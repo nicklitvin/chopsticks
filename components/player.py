@@ -15,14 +15,14 @@ class Player:
             pass
 
     def getMaxWidth(self):
-        hand = os.path.dirname(__file__) + f'\L{self.handL}.txt'
+        hand = os.path.dirname(__file__) + f'/hands/L{self.handL}.txt'
         with open(hand,'r') as txt:
             line = txt.readlines()
             return len(max(map(str.rstrip,line),key=len))
 
     def drawHands(self):
-        handL = os.path.dirname(__file__) + f'\L{self.handL}.txt'
-        handR = os.path.dirname(__file__) + f'\L{self.handR}.txt'
+        handL = os.path.dirname(__file__) + f'/hands/L{self.handL}.txt'
+        handR = os.path.dirname(__file__) + f'/hands/L{self.handR}.txt'
         with open(handL,'r') as left, open(handR,'r') as right:
             leftLines = left.readlines()
             rightLines = right.readlines()
@@ -39,8 +39,8 @@ class Player:
 
     def drawUpsideDownHands(self):
         # handR is left hand but when upside down is on the right
-        handR = os.path.dirname(__file__) + f'\L{self.handL}.txt'
-        handL = os.path.dirname(__file__) + f'\L{self.handR}.txt'
+        handR = os.path.dirname(__file__) + f'/hands/L{self.handL}.txt'
+        handL = os.path.dirname(__file__) + f'/hands/L{self.handR}.txt'
         with open(handL,'r') as left, open(handR,'r') as right:
             leftLines = left.readlines()
             rightLines = right.readlines()
@@ -74,8 +74,8 @@ class Player:
 
     def split(self):
         while True:
-            newSplit = input('how many on each hand? ')
-            newSplit = newSplit.split(' ')
+            newSplit = input('how many on each hand? (ex: 2 0): ')
+            newSplit = "".join(newSplit.split(' '))
             conversion = self.convertElementsToInt(newSplit)
 
             if not conversion or len(conversion) != 2:
