@@ -1,0 +1,2 @@
+draw upside down hands on opponent
+always draw main player on bottom 
