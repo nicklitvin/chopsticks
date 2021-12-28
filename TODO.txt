@@ -1,4 +1,4 @@
-make hand generation lazy
-combine upside down and normal hand generation
 make easier tests for game
 center name between hands
+split and hit should allow spaces, capitals
+which hand to hit should be in viwers perspective

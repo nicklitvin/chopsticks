@@ -1,4 +1,5 @@
 from components.player import Player
+from components.hands import Hands
 
 class Game:
     def __init__(self):
@@ -9,6 +10,7 @@ class Game:
         self.linebreak = '--------'
         self.gaming = True
         self.winner = None
+        self.hands = Hands()
 
         self.assignNames()
         self.run()
@@ -17,15 +19,15 @@ class Game:
         p1_name = input('name of player1?')
         p2_name = input('name of player2?')
 
-        self.p1 = Player(p1_name)
-        self.p2 = Player(p2_name)
+        self.p1 = Player(p1_name,self.hands)
+        self.p2 = Player(p2_name,self.hands)
         self.mainPlayer = self.p1
         self.otherPlayer = self.p2
 
     def draw(self):
         print(self.linebreak)
         print(f'{self.mainPlayer.name}\'s turn')
-        self.otherPlayer.drawUpsideDownHands()
+        self.otherPlayer.drawHands(reversed=1)
         self.mainPlayer.drawHands()
 
     def isGameOver(self):
@@ -37,7 +39,7 @@ class Game:
         self.loser = self.p1 if self.winner is self.p2 else self.p2
 
         print(self.linebreak)
-        self.winner.drawUpsideDownHands()
+        self.winner.drawHands(reversed=1)
         self.loser.drawHands()
         print(f'winner:{self.winner.name}')
         print(self.linebreak)

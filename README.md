@@ -1,11 +1,15 @@
 **Description**
+
 A simple 1v1 game played with two virtual hands in a terminal
+
 Main file: /game.py
 
 **Objective** 
+
 Eliminate all of your opponent's "chopsticks"
 
 **How to Play**
+
 Start of game: Each player has 1 chopstick on each hand
 
 During your turn, you can make one of two actions:

@@ -1,12 +1,9 @@
-import os
-
 class Player:
-    def __init__(self,name):
+    def __init__(self,name,hands):
         self.name = name
         self.handL = 1
         self.handR = 1
-        self.handWidth = self.getMaxWidth()
-        self.space = 5
+        self.hands = hands
 
     def convertElementsToInt(self,arr):
         try:
@@ -14,46 +11,8 @@ class Player:
         except:
             pass
 
-    def getMaxWidth(self):
-        hand = os.path.dirname(__file__) + f'/hands/L{self.handL}.txt'
-        with open(hand,'r') as txt:
-            line = txt.readlines()
-            return len(max(map(str.rstrip,line),key=len))
-
-    def drawHands(self):
-        handL = os.path.dirname(__file__) + f'/hands/L{self.handL}.txt'
-        handR = os.path.dirname(__file__) + f'/hands/L{self.handR}.txt'
-        with open(handL,'r') as left, open(handR,'r') as right:
-            leftLines = left.readlines()
-            rightLines = right.readlines()
-            for a in range(len(leftLines)):
-                lineL = leftLines[a].rstrip() 
-                widthL = len(lineL)
-                addSpacesL = self.handWidth - widthL + self.space
-
-                lineR = rightLines[a].rstrip().translate(
-                    str.maketrans('\\/<>','/\\><'))
-                widthR = len(lineR)
-                addSpacesR = self.handWidth - widthR
-                print(lineL + ' ' * (addSpacesL + addSpacesR) + lineR[::-1])
-
-    def drawUpsideDownHands(self):
-        # handR is left hand but when upside down is on the right
-        handR = os.path.dirname(__file__) + f'/hands/L{self.handL}.txt'
-        handL = os.path.dirname(__file__) + f'/hands/L{self.handR}.txt'
-        with open(handL,'r') as left, open(handR,'r') as right:
-            leftLines = left.readlines()
-            rightLines = right.readlines()
-            for a in range(len(leftLines))[::-1]:
-                lineL = leftLines[a].rstrip().translate(
-                    str.maketrans('\\/<>','/\\><'))
-                widthL = len(lineL)
-                addSpacesL = self.handWidth - widthL + self.space
-
-                lineR = rightLines[a].rstrip()
-                widthR = len(lineR)
-                addSpacesR = self.handWidth - widthR
-                print(lineL + ' ' * (addSpacesL + addSpacesR) + lineR[::-1])
+    def drawHands(self,reversed=0):
+        self.hands.drawHands(self.handL,self.handR,reversed)
 
     def isDead(self):
         if sum((self.handL,self.handR)) == 0:
