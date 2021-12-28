@@ -4,6 +4,8 @@ A simple 1v1 game played with two virtual hands in a terminal
 
 Main file: /game.py
 
+Run with "py chopsticks" or "py game.py"
+
 **Objective** 
 
 Eliminate all of your opponent's "chopsticks"

@@ -15,9 +15,10 @@ class Game:
         self.assignNames()
         self.run()
     
-    def assignNames(self):
-        p1_name = input('name of player1?')
-        p2_name = input('name of player2?')
+    def assignNames(self, p1_name=None, p2_name=None):
+        if not p1_name:
+            p1_name = input('name of player1?')
+            p2_name = input('name of player2?')
 
         self.p1 = Player(p1_name,self.hands)
         self.p2 = Player(p2_name,self.hands)
@@ -34,7 +35,7 @@ class Game:
         if self.p1.isDead() or self.p2.isDead():
             return True
 
-    def endScreen(self):
+    def endScreen(self,end_input=0):
         self.winner = self.p1 if self.p2.isDead() else self.p2
         self.loser = self.p1 if self.winner is self.p2 else self.p2
 
@@ -44,7 +45,7 @@ class Game:
         print(f'winner:{self.winner.name}')
         print(self.linebreak)
 
-        end = input('keep going?')
+        end = end_input or input('keep going?')
 
         if not end:
             self.gaming = False

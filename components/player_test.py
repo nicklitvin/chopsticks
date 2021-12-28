@@ -35,6 +35,35 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(p.convertElementsToInt(['1','2']),[1,2])
         self.assertEqual(p.convertElementsToInt(['1','2b']),None)
 
+    def test_hit(self):
+        p1 = Player('a',hands)
+        p2 = Player('b',hands)
+        p1.hit(p2,('l','r'))
+        self.assertEqual(p2.handL,2)
+
+    def test_isGoodHit(self):
+        p1 = Player('a',hands)
+        p2 = Player('b',hands)
+
+        p2.handL, p2.handR = 3,0
+        self.assertEqual(p1.isLegalHit(p2,'l','l'),None)
+
+    def test_split(self):
+        p1 = Player('a',hands)
+        p1.handL = 4
+        p1.handR = 3
+        p1.split('52')
+        self.assertEqual(p1.handL,0)
+        self.assertEqual(p1.handR,2)
+
+    def test_isGoodSplit(self):
+        p1 = Player('a',hands)
+        self.assertEqual(p1.isGoodSplit((2,0)),True)
+        self.assertEqual(p1.isGoodSplit((2,1)),None)
+        self.assertEqual(p1.isGoodSplit((2,0,0)),None)
+        self.assertEqual(p1.isGoodSplit((1,1)),None)
+
+
     # def test_addManyHands(self):
     #     p = Player('a',hands)
     #     for _ in range(10000):

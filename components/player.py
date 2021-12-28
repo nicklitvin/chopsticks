@@ -1,4 +1,6 @@
 class Player:
+    options = ('l','r')
+
     def __init__(self,name,hands):
         self.name = name
         self.handL = 1
@@ -8,7 +10,7 @@ class Player:
     def convertElementsToInt(self,arr):
         try:
             return list(map(lambda x: int(x),arr))
-        except:
+        except ValueError:
             pass
 
     def drawHands(self,reversed=0):
@@ -18,78 +20,96 @@ class Player:
         if sum((self.handL,self.handR)) == 0:
             return True
     
-    def makeTurn(self,opponent):
+    def makeTurn(self,opponent,test_turn=None):
         while True:
-            turn = input('split or hit?')
-            
-            if turn == 'split' and self.handL + self.handR > 1:
+            turn = input('split or hit?').lower() if not test_turn else test_turn
+
+            if 'split' in turn and self.handL + self.handR > 1:
                 self.split()
                 break
-            elif turn == 'hit':
+            elif 'hit' in turn:
                 self.hit(opponent)
                 break
             else:
                 print('incorrect move')
 
-    def split(self):
+    def split(self,test_newSplit=None):
         while True:
-            newSplit = input('how many on each hand? (ex: 2 0): ')
+            newSplit =  input('how many on each hand? (ex: 2 0): ') \
+                        if not test_newSplit else test_newSplit
+
             newSplit = "".join(newSplit.split(' '))
             conversion = self.convertElementsToInt(newSplit)
 
-            if not conversion or len(conversion) != 2:
-                print('bad input')
-                continue
-
-            newL = conversion[0]
-            newR = conversion[1] 
-
-            if newL == self.handL and newR == self.handR or \
-               newR == self.handL and newL == self.handR:
-                print('no change')
-                continue
-
-            if newL + newR == self.handL + self.handR:
-                self.handL = newL
-                self.handR = newR
+            if self.isGoodSplit(conversion):
+                self.handL, self.handR = conversion
                 self.reduceHands()
                 break
 
-            else:
-                print('bad split, try again')
+            if test_newSplit:
+                raise Exception('Bad test_newSplit')
+    
+    def isGoodSplit(self,conversion):
+        if not conversion or len(conversion) != 2:
+            print('bad input')
+            return
+
+        newL,newR = conversion
+
+        if newL == self.handL and newR == self.handR or \
+            newR == self.handL and newL == self.handR:
+            print('no change')
+            return
+
+        if newL + newR != self.handL + self.handR:
+            print('bad split, try again')
+            return
+        
+        return True
 
     def reduceHands(self):
         self.handL = self.handL % 5
         self.handR = self.handR % 5
 
-    def hit(self,opponent):
+    def hit(self,opponent,test_answer = None):
         while True:
-            my_hand = input(f'Which hand (L,R) hits {opponent.name}: ')
-            opp_hand = input('Which hand do you hit? ')
-            options = ('l','r')
-            
-            if not isinstance(my_hand,str) or not isinstance(opp_hand,str):
-                print('not numbers')
-                continue
-
-            my_hand = my_hand.lower()
-            opp_hand = opp_hand.lower()
-
-            if self.getHandVal(my_hand) == 0:
-                print("can't hit with 0")
-                continue
-
-            if opponent.getHandVal(opp_hand) == 0:
-                print("can't hit a 0")
-                continue
-
-            if not my_hand in options or not opp_hand in options:
-                print('bad input')
-                continue
+            if test_answer:
+                my_hand,opp_hand = test_answer
             else:
+                my_hand = input(f'Which hand (L,R) hits {opponent.name}: ')
+                opp_hand = input('Which hand do you hit (your left or right)? ')
+
+            if self.isLegalHit(opponent,my_hand,opp_hand):
+                my_hand, opp_hand = my_hand.lower(), opp_hand.lower()
+                opp_hand =  Player.options[0] if opp_hand == Player.options[1] \
+                            else Player.options[1]
+                            
                 my_hand_val = self.getHandVal(my_hand)
                 opponent.takeHit(opp_hand,my_hand_val)
                 break
+
+    def isLegalHit(self,opponent,my_hand,opp_hand):
+        if not (isinstance(my_hand,str) and isinstance(opp_hand,str)):
+            print('not numbers')
+            return
+
+        my_hand, opp_hand = my_hand.lower(), opp_hand.lower()
+        opp_hand =  Player.options[0] if opp_hand == Player.options[1] \
+                    else Player.options[1]
+
+        if not (my_hand in Player.options and opp_hand in Player.options):
+            print('bad input')
+            return
+
+        if self.getHandVal(my_hand) == 0:
+            print("can't hit with 0")
+            return
+
+        if opponent.getHandVal(opp_hand) == 0:
+            print("can't hit a 0")
+            return
+
+        return True
 
     def getHandVal(self,hand):
         if hand == 'l':
@@ -97,7 +117,7 @@ class Player:
         elif hand == 'r':
             return self.handR
         else:
-            raise AssertionError('hand:',hand)
+            raise Exception('hand not l or r')
 
     def takeHit(self,handLetter,value):
         if handLetter == 'l':
@@ -105,7 +125,7 @@ class Player:
         elif handLetter == 'r':
             self.handR += value
         else:
-            raise AssertionError('handLetter error')
+            raise Exception('handLetter not l or r')
 
         self.reduceHands()
 

@@ -27,8 +27,8 @@ class Hands:
             self.addHand(left)
         
         right_copy = []
-        for a in range(len(self.hands[left])):
-            line = self.hands[left][a].translate(str.maketrans('\\/<>','/\\><')) 
+        for val in self.hands[left]:
+            line = val.translate(str.maketrans('\\/<>','/\\><')) 
             right_copy.append(line[::-1])
 
         self.hands[hand] = right_copy
@@ -46,8 +46,8 @@ class Hands:
             self.addLeftHand(left)
         
         copy = []
-        for a in range(len(self.hands[left]))[::-1]:
-            copy.append(self.hands[left][a].translate(str.maketrans('\\/<>','/\\><')))
+        for val in self.hands[left][::-1]:
+            copy.append(val.translate(str.maketrans('\\/<>','/\\><')))
         
         self.hands[hand] = copy
     
@@ -57,8 +57,8 @@ class Hands:
             self.addRightHand(right)
         
         copy = []
-        for a in range(len(self.hands[right]))[::-1]:
-            copy.append(self.hands[right][a].translate(str.maketrans('\\/<>','/\\><')))
+        for val in self.hands[right][::-1]:
+            copy.append(val.translate(str.maketrans('\\/<>','/\\><')))
         
         self.hands[hand] = copy
 
@@ -66,7 +66,7 @@ class Hands:
         my_left = f'L{left_count}' if not upsideDown else f'UL{right_count}'
         my_right = f'R{right_count}' if not upsideDown else f'UR{left_count}'
         for hand in [my_left,my_right]:
-            if hand not in self.hands.keys():
+            if hand not in self.hands:
                 self.addHand(hand)
         
         for left,right in zip(self.hands[my_left],self.hands[my_right]):
